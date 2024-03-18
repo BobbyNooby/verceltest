@@ -1,32 +1,38 @@
 <script>
-	import { browser } from '$app/environment';
-	import { page } from '$app/stores';
-	import { webVitals } from '$lib/vitals';
-	import Header from './Header.svelte';
+	import Header from '../lib/components/Header.svelte';
 	import './styles.css';
+	import '../app.css';
+	import Analytics from '$lib/utils/Analytics.svelte';
+	import { isMobile } from '$lib/utils/mobileStore';
+	import { onMount } from 'svelte';
 
-	/** @type {import('./$types').LayoutServerData} */
-	export let data;
-
-	$: if (browser && data?.analyticsId) {
-		webVitals({
-			path: $page.url.pathname,
-			params: $page.params,
-			analyticsId: data.analyticsId
-		});
+	function checkMobile() {
+		if (window.innerWidth < 768) {
+			$isMobile = true;
+		} else {
+			$isMobile = false;
+		}
 	}
+
+	//Test device width to check for mobile conditions in the html
+	onMount(() => {
+		// Make sure this only works in browser
+		if (typeof window !== 'undefined') {
+			checkMobile();
+			window.addEventListener('resize', () => {
+				checkMobile();
+			});
+		}
+	});
 </script>
 
-<div class="app">
+<div class="app bg-zinc-800">
+	<Analytics />
 	<Header />
 
 	<main>
 		<slot />
 	</main>
-
-	<footer>
-		<p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
-	</footer>
 </div>
 
 <style>
@@ -45,23 +51,5 @@
 		max-width: 64rem;
 		margin: 0 auto;
 		box-sizing: border-box;
-	}
-
-	footer {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		padding: 12px;
-	}
-
-	footer a {
-		font-weight: bold;
-	}
-
-	@media (min-width: 480px) {
-		footer {
-			padding: 12px 0;
-		}
 	}
 </style>
