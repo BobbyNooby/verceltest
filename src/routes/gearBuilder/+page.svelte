@@ -25,15 +25,16 @@
 		storeCurrentBuild();
 	}
 
+	let currentGears = getCurrentGearSet();
+
 	// Fade in initiator. Reset stores.
 	let ready = false;
 	onMount(() => {
 		ready = true;
 		loadCode(localStorage.getItem('currentBuild')); // Load currentBuild from local storage. Basically keeps the last build the person made on
 		loadHash(); // Load if link has hash.
+		currentGears = getCurrentGearSet();
 	});
-
-	let currentGears = getCurrentGearSet();
 
 	$: {
 		currentGears = getCurrentGearSet();

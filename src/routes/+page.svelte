@@ -7,9 +7,20 @@
 	import { base } from '$app/paths';
 	import NavGrid from '$lib/components/NavGrid.svelte';
 
+	export let data;
+	let datar = [];
+
 	// Fade in initiator
 	let ready = false;
-	onMount(() => (ready = true));
+	onMount(() => {
+		ready = true;
+
+		for (const item in data.testDB) {
+			datar.push(data.testDB[item]);
+		}
+		console.log(datar);
+		console.log(data.testDB);
+	});
 </script>
 
 <svelte:head>
@@ -59,6 +70,9 @@
 			out:fade={{ delay: 250, duration: 300 }}
 		>
 			Arcane Odyssey Tools
+			{#each data.testDB as amogogs}
+				<p>{amogogs.name}</p>
+			{/each}
 		</p>
 
 		<!-- No navbar component as i want this to be a little different -->
